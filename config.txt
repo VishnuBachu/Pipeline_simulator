@@ -1,0 +1,3 @@
+forwarding true
+ADD_latency 1
+MUL_latency 3
