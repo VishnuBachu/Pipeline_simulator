@@ -1,3 +1,5 @@
 forwarding true
 ADD_latency 1
 MUL_latency 3
+
+array 9 4 3 1 7

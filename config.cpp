@@ -1,23 +1,43 @@
+#include <sstream>
 #include "structures.h"
 #include <fstream>
-
 Config load_config(string filename){
 
     Config cfg;
 
     ifstream file(filename);
-    string key,value;
+    string key;
 
-    while(file >> key >> value){
+    while(file >> key){
 
-        if(key=="forwarding")
+        if(key=="forwarding"){
+            string value;
+            file >> value;
             cfg.forwarding = (value=="true");
+        }
 
-        if(key=="ADD_latency")
-            cfg.add_latency = stoi(value);
+        else if(key=="ADD_latency"){
+            file >> cfg.add_latency;
+        }
 
-        if(key=="MUL_latency")
-            cfg.mul_latency = stoi(value);
+        else if(key=="MUL_latency"){
+            file >> cfg.mul_latency;
+        }
+
+        else if(key=="array"){
+
+            int val;
+            int idx = 0;
+
+            string line;
+            getline(file,line);
+
+            stringstream ss(line);
+
+            while(ss >> val){
+                memory[idx++] = val;
+            }
+        }
     }
 
     return cfg;

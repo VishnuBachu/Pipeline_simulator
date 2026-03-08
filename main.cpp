@@ -4,9 +4,11 @@ Config load_config(string filename);
 vector<Instruction> load_program(string filename);
 void run(vector<Instruction>& program);
 
+Config config;
+
 int main(){
 
-    Config config = load_config("config.txt");
+    config = load_config("config.txt");   //load config
 
     vector<Instruction> program =
     load_program("program.asm");
