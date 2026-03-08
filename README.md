@@ -1,101 +1,154 @@
-# COA_PROJ
-Meeting Minutes
-Meeting 6
+# COA Pipeline Simulator
 
-Date: 8 March 2026
-Members: Rudresh Prasad, Bachu Vishnu
+A C++ based simulator for a **5-stage RISC-V pipeline** developed as part of the **COA project**.
 
-Decisions:
+The simulator models the following pipeline stages:
 
-Final testing of the simulator using bubble sort.
-Added array initialization through the config file.
-Verified stalls, cycles, and IPC calculations.
+* Instruction Fetch (IF)
+* Instruction Decode (ID)
+* Execute (EX)
+* Memory Access (MEM)
+* Write Back (WB)
 
-Tasks:
+Features implemented:
 
-Rudresh: debug branch behavior and stall counting.
-Vishnu : run test cases and verify outputs.
+* Assembly instruction parser
+* Pipeline stage simulation
+* Data hazard detection
+* Data forwarding
+* Stall handling for load-use hazards
+* Cycle, stall, and IPC calculation
 
-Meeting 5
+---
 
-Date: 7 March 2026
-Members: Rudresh Prasad, Bachu Vishnu
+# How to Run
 
-Decisions:
+## Compile
 
-Implemented hazard detection logic.
-Added forwarding logic from EX/MEM and MEM/WB stages.
-Implemented stall mechanism for load-use hazards.
+```bash
+g++ main.cpp pipeline.cpp parser.cpp config.cpp -o simulator
+```
 
-Tasks:
+## Run
 
-Rudresh: test forwarding enabled/disabled cases.
-Vishnu: verify pipeline execution with sample programs.
+```bash
+./simulator
+```
 
-Meeting 4
+---
 
-Date: 5 March 2026
-Members: Rudresh Prasad, Bachu Vishnu
+# Meeting Minutes
 
-Decisions:
+## Meeting 6
 
-Completed implementation of pipeline stages:
-IF
-ID
-EX
-MEM
-WB
-Implemented pipeline registers between stages.
+**Date:** 8 March 2026
+**Members:** Rudresh Prasad, Bachu Vishnu
 
-Tasks:
+### Decisions
 
-Rudresh: implement execution logic for instructions.
-Vishnu: implement memory stage.
+* Final testing of the simulator using bubble sort.
+* Added array initialization through the config file.
+* Verified stalls, cycles, and IPC calculations.
 
-Meeting 3
+### Tasks
 
-Date: 3 March 2026
-Members: Rudresh Prasad, Bachu vishnu
+* **Rudresh:** Debug branch behavior and stall counting.
+* **Vishnu:** Run test cases and verify outputs.
 
-Decisions:
+---
 
-Implemented assembly parser.
-Added support for labels and branching instructions.
-Verified instruction parsing for add, sub, lw, sw, bne.
+## Meeting 5
 
-Tasks:
+**Date:** 7 March 2026
+**Members:** Rudresh Prasad, Bachu Vishnu
 
-Rudresh: extend parser for remaining instructions.
-Vishnu: begin implementing pipeline execution.
+### Decisions
 
-Meeting 2
+* Implemented hazard detection logic.
+* Added forwarding logic from **EX/MEM** and **MEM/WB** stages.
+* Implemented stall mechanism for load-use hazards.
 
-Date: 28 February 2026
-Members: Rudresh Prasad, Bachu Vishnu
+### Tasks
 
-Decisions:
+* **Rudresh:** Test forwarding enabled/disabled cases.
+* **Vishnu:** Verify pipeline execution with sample programs.
 
-Designed data structures for instructions and pipeline registers.
-Decided to use a vector to store program instructions.
-Planned the structure of the simulator modules.
+---
 
-Tasks:
+## Meeting 4
 
-Rudresh: implement instruction structure and parsing.
-Vishnu: design pipeline registers.
+**Date:** 5 March 2026
+**Members:** Rudresh Prasad, Bachu Vishnu
 
-Meeting 1
+### Decisions
 
-Date: 25 February 2026
-Members: Rudresh Prasad, Bachu Vishnu
+* Completed implementation of pipeline stages:
 
-Decisions:
+  * IF
+  * ID
+  * EX
+  * MEM
+  * WB
+* Implemented pipeline registers between stages.
 
-Chose C++ as the programming language.
-Decided to implement a 5-stage pipeline.
-Reviewed RISC-V ISA and selected instructions required for the simulator.
+### Tasks
 
-Tasks:
+* **Rudresh:** Implement execution logic for instructions.
+* **Vishnu:** Implement memory stage.
 
-Rudresh: begin instruction parsing implementation.
-Vishnu: research pipeline implementation strategies.
+---
+
+## Meeting 3
+
+**Date:** 3 March 2026
+**Members:** Rudresh Prasad, Bachu Vishnu
+
+### Decisions
+
+* Implemented assembly parser.
+* Added support for labels and branching instructions.
+* Verified instruction parsing for `add`, `sub`, `lw`, `sw`, `bne`.
+
+### Tasks
+
+* **Rudresh:** Extend parser for remaining instructions.
+* **Vishnu:** Begin implementing pipeline execution.
+
+---
+
+## Meeting 2
+
+**Date:** 28 February 2026
+**Members:** Rudresh Prasad, Bachu Vishnu
+
+### Decisions
+
+* Designed data structures for instructions and pipeline registers.
+* Decided to use a **vector** to store program instructions.
+* Planned the structure of the simulator modules.
+
+### Tasks
+
+* **Rudresh:** Implement instruction structure and parsing.
+* **Vishnu:** Design pipeline registers.
+
+---
+
+## Meeting 1
+
+**Date:** 25 February 2026
+**Members:** Rudresh Prasad, Bachu Vishnu
+
+### Decisions
+
+* Chose **C++** as the programming language.
+* Decided to implement a **5-stage pipeline simulator**.
+* Reviewed the **RISC-V ISA** and selected instructions required for the simulator.
+
+### Tasks
+
+* **Rudresh:** Begin instruction parsing implementation.
+* **Vishnu:** Research pipeline implementation strategies.
+
+---
+
