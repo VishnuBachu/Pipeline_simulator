@@ -6,23 +6,19 @@ void run(vector<Instruction>& program);
 
 Config config;
 
-int main(){
+int main()
+{
+	config = load_config("config.txt");   
 
-    config = load_config("config.txt");   //load config
+	vector<Instruction> program = load_program("program.asm");
+	run(program);
 
-    vector<Instruction> program =
-    load_program("program.asm");
+	cout << "Execution finished\n";
+	cout << "Cycles: " << cycles << endl;
+	cout << "Instructions: " << instructions_executed << endl;
+	cout << "Stalls: " << stalls << endl;
 
-    run(program);
+	double IPC = (double)instructions_executed / cycles;
 
-    cout << "Execution finished\n";
-
-    cout << "Cycles: " << cycles << endl;
-    cout << "Instructions: " << instructions_executed << endl;
-    cout << "Stalls: " << stalls << endl;
-
-    double IPC =
-    (double)instructions_executed / cycles;
-
-    cout << "IPC: " << IPC << endl;
+	cout << "IPC: " << IPC << endl;
 }
