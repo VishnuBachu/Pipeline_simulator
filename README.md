@@ -26,7 +26,7 @@ Features implemented:
 ## Compile
 
 ```bash
-g++ main.cpp pipeline.cpp parser.cpp config.cpp -o simulator
+g++ main.cpp pipeline.cpp parser.cpp config.cpp cache.cpp -o simulator
 ```
 
 ## Run
