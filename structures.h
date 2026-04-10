@@ -28,6 +28,25 @@ struct Config
 	bool forwarding;
 	int add_latency;
 	int mul_latency;
+	int main_memory_latency;
+
+	int l1i_size;
+	int l1i_block_size;
+	int l1i_associativity;
+	int l1i_latency;
+
+	int l1d_size;
+	int l1d_block_size;
+	int l1d_associativity;
+	int l1d_latency;
+
+	int l2_size;
+	int l2_block_size;
+	int l2_associativity;
+	int l2_latency;
+
+	string replacement_policy_l1;
+	string replacement_policy_l2;
 };
 extern Config config;
 extern int cycles;

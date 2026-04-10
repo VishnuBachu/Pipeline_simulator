@@ -1,5 +1,24 @@
 forwarding true
 ADD_latency 1
 MUL_latency 3
+main_memory_latency 50
+
+L1I_size 1024
+L1I_block_size 64
+L1I_associativity 1
+L1I_latency 1
+
+L1D_size 1024
+L1D_block_size 64
+L1D_associativity 1
+L1D_latency 1
+
+L2_size 4096
+L2_block_size 64
+L2_associativity 4
+L2_latency 8
+
+replacement_policy_L1 LRU
+replacement_policy_L2 FIFO
 
 array 9 4 3 1 7

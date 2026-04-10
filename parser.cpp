@@ -43,13 +43,13 @@ Instruction parse_line(string line)
 
         	ss >> r1 >> r2 >> label;
 
-        	if(r1.back()==',') r1.pop_back();
+        	if(r1.back()==',') r1.pop_back();	// remove ","
         	if(r2.back()==',') r2.pop_back();
 
-        	r1 = r1.substr(1);
+        	r1 = r1.substr(1);	//remove 'x'
         	r2 = r2.substr(1);
 
-        	ins.rs1 = stoi(r1);
+        	ins.rs1 = stoi(r1);	//convert to integer
         	ins.rs2 = stoi(r2);
 
         	ins.imm = labels[label];

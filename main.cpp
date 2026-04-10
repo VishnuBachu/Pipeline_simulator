@@ -1,4 +1,5 @@
 #include "structures.h"
+#include "cache.h"
 
 Config load_config(string filename);
 vector<Instruction> load_program(string filename);
@@ -9,6 +10,7 @@ Config config;
 int main()
 {
 	config = load_config("config.txt");   
+	init_caches(config);
 
 	vector<Instruction> program = load_program("program.asm");
 	run(program);
@@ -17,6 +19,7 @@ int main()
 	cout << "Cycles: " << cycles << endl;
 	cout << "Instructions: " << instructions_executed << endl;
 	cout << "Stalls: " << stalls << endl;
+	cout << "Cache miss rate: " << overall_l1_miss_rate() << endl;
 
 	double IPC = (double)instructions_executed / cycles;
 
