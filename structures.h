@@ -1,6 +1,7 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
+#include <cstdint>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -14,6 +15,9 @@ struct Instruction
 	int rs2 = -1;		//registers start with safe val's	
 	int imm = 0;
 	string label = "";
+	// Phase 3 trace replay: L/S use virtual address here (byte).
+	uint32_t trace_va = 0;
+	bool trace_mem = false;
 };
 
 struct PipelineReg 
@@ -21,6 +25,7 @@ struct PipelineReg
 	Instruction instr;
 	int alu_result;
 	bool empty = true;
+	uint32_t mem_phys_addr = 0;
 };
 
 struct Config
@@ -52,5 +57,7 @@ extern Config config;
 extern int cycles;
 extern int stalls;
 extern int instructions_executed;
+
+vector<Instruction> load_trace(const string& filename);
 
 #endif

@@ -17,9 +17,9 @@ enum class ReplacementPolicy
 
 struct CacheLine
 {
-	bool valid = false;
-	uint32_t tag = 0;
-	long long last_used = 0;
+	bool valid =false;
+	uint32_t tag= 0;
+	long long last_used =0;
 	long long inserted_at = 0;
 };
 
@@ -30,17 +30,17 @@ public:
 
 	void configure(int size_bytes, int block_size, int associativity, int latency, ReplacementPolicy policy)
 	{
-		block_size_ = max(1, block_size);
+		block_size_ =max(1, block_size);
 		associativity_ = max(1, associativity);
 		latency_ = max(1, latency);
 		policy_ = policy;
 
-		const int blocks = max(1, size_bytes / block_size_);
+		const int blocks= max(1, size_bytes / block_size_);
 		num_sets_ = max(1, blocks / associativity_);
 		sets_.assign(num_sets_, vector<CacheLine>(associativity_));
-		timer_ = 0;
-		accesses_ = 0;
-		misses_ = 0;
+		timer_=0;
+		accesses_ =0;
+		misses_=0;
 	}
 
 	bool access(uint32_t byte_address)
@@ -48,22 +48,22 @@ public:
 		accesses_++;
 		timer_++;
 
-		const uint32_t block_number = byte_address / static_cast<uint32_t>(block_size_);
+		const uint32_t block_number = byte_address/ static_cast<uint32_t>(block_size_);
 		const int set_idx = static_cast<int>(block_number % static_cast<uint32_t>(num_sets_));
 		const uint32_t tag = block_number / static_cast<uint32_t>(num_sets_);
 
 		auto& set = sets_[set_idx];
 		for(auto& line : set)
 		{
-			if(line.valid && line.tag == tag)
+			if(line.valid && line.tag==tag)
 			{
-				line.last_used = timer_;
+				line.last_used=timer_;
 				return true;
 			}
 		}
 
 		misses_++;
-		int victim_idx = -1;
+		int victim_idx= -1;
 		for(int i = 0; i < static_cast<int>(set.size()); i++)
 		{
 			if(!set[i].valid)
@@ -73,12 +73,12 @@ public:
 			}
 		}
 
-		if(victim_idx == -1)
+		if(victim_idx== -1)
 		{
 			victim_idx = 0;
 			for(int i = 1; i < static_cast<int>(set.size()); i++)
 			{
-				if(policy_ == ReplacementPolicy::LRU)
+				if(policy_== ReplacementPolicy::LRU)
 				{
 					if(set[i].last_used < set[victim_idx].last_used) victim_idx = i;
 				}
@@ -116,21 +116,26 @@ SetAssociativeCache l1i_cache;
 SetAssociativeCache l1d_cache;
 SetAssociativeCache l2_cache;
 int main_memory_latency = 50;
+bool g_l2_enabled = true;
 
 ReplacementPolicy parse_policy(const string& policy_name)
 {
 	string p = policy_name;
 	std::transform(p.begin(), p.end(), p.begin(), [](unsigned char c){ return static_cast<char>(tolower(c)); });
-	if(p == "fifo") return ReplacementPolicy::FIFO;
+	if(p =="fifo") return ReplacementPolicy::FIFO;
 	return ReplacementPolicy::LRU;
 }
 }
 
 void init_caches(const Config& cfg)
 {
+	g_l2_enabled = cfg.l2_size > 0;
 	l1i_cache.configure(cfg.l1i_size, cfg.l1i_block_size, cfg.l1i_associativity, cfg.l1i_latency, parse_policy(cfg.replacement_policy_l1));
 	l1d_cache.configure(cfg.l1d_size, cfg.l1d_block_size, cfg.l1d_associativity, cfg.l1d_latency, parse_policy(cfg.replacement_policy_l1));
-	l2_cache.configure(cfg.l2_size, cfg.l2_block_size, cfg.l2_associativity, cfg.l2_latency, parse_policy(cfg.replacement_policy_l2));
+	if (g_l2_enabled)
+		l2_cache.configure(cfg.l2_size, cfg.l2_block_size, cfg.l2_associativity, cfg.l2_latency, parse_policy(cfg.replacement_policy_l2));
+	else
+		l2_cache.configure(64, 64, 1, 1, parse_policy("FIFO"));
 	main_memory_latency = max(1, cfg.main_memory_latency);
 }
 
@@ -138,11 +143,18 @@ int access_instruction_cache(uint32_t byte_address)
 {
     int latency = l1i_cache.latency();
 
-    // L1I hit
+    //L1I hit
     if(l1i_cache.access(byte_address)) 
         return latency;
 
-    // L1I miss → check L2
+    if (!g_l2_enabled)
+    {
+        latency += main_memory_latency;
+        l1i_cache.access(byte_address);
+        return latency;
+    }
+
+    //L1I miss → check L2
     latency += l2_cache.latency();
 
     if(l2_cache.access(byte_address))
@@ -152,10 +164,10 @@ int access_instruction_cache(uint32_t byte_address)
         return latency;
     }
 
-    // L2 miss → go to memory
+    //L2 miss → go to memory
     latency += main_memory_latency;
 
-    //  Fill both L2 and L1I
+    // Fill both L2 and L1I
     l2_cache.access(byte_address);
     l1i_cache.access(byte_address);
 
@@ -164,11 +176,18 @@ int access_instruction_cache(uint32_t byte_address)
 
 int access_data_cache(uint32_t byte_address)
 {
-    int latency = l1d_cache.latency();
+    int latency=l1d_cache.latency();
 
-    // L1D hit
+    //L1D hit
     if(l1d_cache.access(byte_address)) 
         return latency;
+
+    if (!g_l2_enabled)
+    {
+        latency += main_memory_latency;
+        l1d_cache.access(byte_address);
+        return latency;
+    }
 
     // L1D miss → check L2
     latency += l2_cache.latency();
@@ -181,7 +200,7 @@ int access_data_cache(uint32_t byte_address)
     }
 
     // L2 miss → go to memory
-    latency += main_memory_latency;
+    latency +=main_memory_latency;
 
     //Fill both L2 and L1D
     l2_cache.access(byte_address);
